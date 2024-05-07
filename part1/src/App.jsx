@@ -1,62 +1,80 @@
-const Header = (props) => {
-  return <h1>{props.course}</h1>
-}
+import { useState } from 'react'
 
-const Part = (props) => {
-  console.log(props)
-  return (
-    <p>
-      {props.part}: {props.exercises}
-    </p>
-  )
-}
-
-const Content = (props) => {
-  console.log(props)
+const Buttons = (props) => {
+  console.log(props.text)
   return (
     <div>
-      <Part part={props.parts[0].name} exercises={props.parts[0].exercises} />
-      <Part part={props.parts[1].name} exercises={props.parts[1].exercises} />
-      <Part part={props.parts[2].name} exercises={props.parts[2].exercises} />
+      <button onClick={() => props.good((prev) => prev + 1)}>
+        {props.text[0]}
+      </button>
+      <button onClick={() => props.neutral((prev) => prev + 1)}>
+        {props.text[1]}
+      </button>
+      <button onClick={() => props.bad((prev) => prev + 1)}>
+        {props.text[2]}
+      </button>
     </div>
   )
 }
 
-const Total = (props) => {
+const StatisticLine = ({ text, value }) => {
   return (
-    <p>
-      Number of exercises:{' '}
-      {props.parts[0].exercises +
-        props.parts[1].exercises +
-        props.parts[2].exercises}
-    </p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
-const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10,
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7,
-      },
-      {
-        name: 'State of a component',
-        exercises: 14,
-      },
-    ],
+const Statistics = ({ good, neutral, bad }) => {
+  if (good === 0 && neutral === 0 && bad === 0) {
+    return <p>No feedback has been gathered</p>
+  } else {
+    return (
+      <div>
+        <table>
+          <tbody>
+            <StatisticLine text="good" value={good} />
+            <StatisticLine text="neutral" value={neutral} />
+            <StatisticLine text="bad" value={bad} />
+            <tr>
+              <td>all</td>
+              <td>{good + neutral + bad}</td>
+            </tr>
+            <tr>
+              <td>average</td>
+              <td>{(good - bad) / (good + neutral + bad)}</td>
+            </tr>
+            <tr>
+              <td>positive</td>
+              <td>{(good / (good + neutral + bad)) * 100} %</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )
   }
+}
+
+const App = () => {
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const buttonText = ['good', 'neutral', 'bad']
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <h1>give feedback</h1>
+      <Buttons
+        good={setGood}
+        neutral={setNeutral}
+        bad={setBad}
+        text={buttonText}
+      />
+      <h2>statistics</h2>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
