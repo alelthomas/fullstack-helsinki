@@ -1,6 +1,4 @@
-# Sequence Diagram
-
-Here is an example sequence diagram creating a new note:
+# Creating note on Single Page App
 
 ```mermaid
 sequenceDiagram;
@@ -9,7 +7,7 @@ sequenceDiagram;
     activate server;
     deactivate server;
 
-    browser->>server: GET <https://studies.cs.helsinki.fi/exampleapp/notes>;
+    browser->>server: GET <https://studies.cs.helsinki.fi/exampleapp/spa>;
     activate server;
     server->>browser: returns HTML document;
     deactivate server;
@@ -19,7 +17,7 @@ sequenceDiagram;
     server->>browser: returns stylesheet;
     deactivate server;
 
-    browser->>server: GET <https://studies.cs.helsinki.fi/exampleapp/main.js>;
+    browser->>server: GET <https://studies.cs.helsinki.fi/exampleapp/spa.js>;
     activate server;
     server->>browser: returns script;
     deactivate server;
@@ -33,10 +31,9 @@ sequenceDiagram;
 
     Note left of browser: user submits new note;
 
-    client->>browser: enters note;
-    client->>browser: hits Save button;
+    client->>browser: enters note
     activate server;
-    browser->>server: POST <https://studies.cs.helsinki.fi/exampleapp/new_note>;
+    browser->>server: POST <https://studies.cs.helsinki.fi/exampleapp/new_note_spa>;
     server->>browser: updates JSON with new note;
     deactivate server;
 
