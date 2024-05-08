@@ -1,11 +1,22 @@
 import Note from "./components/Note";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const App = (props) => {
+const App = () => {
 
-  const [ notes, setNotes ] = useState(props.notes); // state is set to the initial array of notes
+  const [ notes, setNotes ] = useState([]); // state is set to the initial array of notes
   const [ newNote, setNewNote ] = useState(''); // state is set to an empty string
   const [ showAll, setShowAll ] = useState(true);
+
+  useEffect(() => {
+    console.log('effect');
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled');
+        setNotes(response.data);
+      })
+  }, [])
 
   // if we wanted it to be an empty array:
   // const [ notes, setNotes ] = useState([]);
